@@ -1,4 +1,5 @@
 ﻿
+using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions;
 using OnlineShop.DomainTest.Common;
 
@@ -17,12 +18,12 @@ public class UserTests
     {
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 3).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.UsernameMinLength-1).ToArray()),
             typeof(MinLengthException)
         };
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 51).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.UsernameMaxLength+1).ToArray()),
             typeof(MaxLengthException)
         };
         yield return new object[]
@@ -58,12 +59,12 @@ public class UserTests
     {
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 257).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.PasswordHashLength+1).ToArray()),
             typeof(LengthException)
         };
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 254).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.PasswordHashLength-1).ToArray()),
             typeof(LengthException)
         };
         yield return new object[]
@@ -99,7 +100,7 @@ public class UserTests
     {
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 51).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.UserTitleMaxLength+1).ToArray()),
             typeof(MaxLengthException)
         };
         yield return new object[]
@@ -135,11 +136,11 @@ public class UserTests
     {
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 50).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.UsernameMaxLength).ToArray()),
         };
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 4).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.UsernameMinLength).ToArray()),
         };
         yield return new object[]
         {
@@ -164,7 +165,7 @@ public class UserTests
     {
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 256).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.PasswordHashLength).ToArray()),
         };
 
     }
@@ -185,11 +186,11 @@ public class UserTests
     {
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 50).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.UserTitleMaxLength).ToArray()),
         };
         yield return new object[]
         {
-            new string(Enumerable.Repeat('*', 1).ToArray()),
+            new string(Enumerable.Repeat('*', UserPropertyConfiguration.UserTitleMinLength).ToArray()),
         };
         yield return new object[]
         {

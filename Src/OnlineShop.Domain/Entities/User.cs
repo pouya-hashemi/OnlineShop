@@ -1,5 +1,6 @@
 ﻿
 using OnlineShop.Domain.Common;
+using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions;
 
 
@@ -28,13 +29,13 @@ public class User:EntityBase<long>
             throw new NullOrEmptyException(nameof(username));
         }
         
-        if (username.Length < 4)
+        if (username.Length < UserPropertyConfiguration.UsernameMinLength)
         {
-            throw new MinLengthException(nameof(username), 4);
+            throw new MinLengthException(nameof(username), UserPropertyConfiguration.UsernameMinLength);
         }
         if (username.Length>50)
         {
-            throw new MaxLengthException(nameof(username), 50);
+            throw new MaxLengthException(nameof(username), UserPropertyConfiguration.UsernameMaxLength);
         }
         return username;
     }
@@ -46,9 +47,9 @@ public class User:EntityBase<long>
             throw new NullOrEmptyException(nameof(password));
         }
 
-        if (password.Length!=256)
+        if (password.Length!=UserPropertyConfiguration.PasswordHashLength)
         {
-            throw new LengthException(nameof(password), 256);
+            throw new LengthException(nameof(password), UserPropertyConfiguration.PasswordHashLength);
         }
 
         return password;
@@ -61,9 +62,9 @@ public class User:EntityBase<long>
             throw new NullOrEmptyException(nameof(userTitle));
         }
 
-        if (userTitle.Length>50)
+        if (userTitle.Length>UserPropertyConfiguration.UserTitleMaxLength)
         {
-            throw new MaxLengthException(nameof(userTitle), 50);
+            throw new MaxLengthException(nameof(userTitle), UserPropertyConfiguration.UserTitleMaxLength);
         }
 
         return userTitle;

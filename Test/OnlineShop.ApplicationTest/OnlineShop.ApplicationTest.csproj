@@ -9,7 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
         <PackageReference Include="MockQueryable.Moq" Version="7.0.0" />
         <PackageReference Include="Moq" Version="4.18.4" />
@@ -26,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Src\OnlineShop.Application\OnlineShop.Application.csproj" />
       <ProjectReference Include="..\..\Src\OnlineShop.Domain\OnlineShop.Domain.csproj" />
       <ProjectReference Include="..\..\Src\OnlineShop.Infrastructure\OnlineShop.Infrastructure.csproj" />
     </ItemGroup>

@@ -9,4 +9,6 @@ public class EntityGenerator
     public User GenerateUser =>  new User(new string(Enumerable.Repeat('a',UserPropertyConfiguration.UsernameMinLength).ToArray()),
          new HashManager().CreateHash( new string( Enumerable.Repeat('a',UserPropertyConfiguration.PasswordMinLength).ToArray())),
         new string(Enumerable.Repeat('a',UserPropertyConfiguration.UserTitleMinLength).ToArray()));
+    public Role GenerateRole =>  new Role(new string(Enumerable.Repeat('a',RolePropertyConfiguration.NameMaxLength).ToArray()));
+
 }

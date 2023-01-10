@@ -12,7 +12,8 @@ public class DatabaseFixture: IAsyncLifetime
     public IAppDbContext DbContext { get; private set; }
     private DbConnection _dbConnection = default;
     private Respawner _respawner = default;
-    
+    private const string _connectionString = "Server=127.0.0.1; Database=OnlineShop_DomainTest;User Id=sa; password=symbian;TrustServerCertificate=True;";
+
     public DatabaseFixture()
     {
         
@@ -26,20 +27,24 @@ public class DatabaseFixture: IAsyncLifetime
     public async Task InitializeAsync()
     {
 
-        await InitializeRespawner();
+        
 
         var dbOption = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlServer("Server=.; Database=OnlineShopPouya;User Id=sa; password=symbian;TrustServerCertificate=True")
+            .UseSqlServer(_connectionString)
             .Options;
         
-        DbContext = new AppDbContext(dbOption);
+        DbContext = new AppDbContext(dbOption);;
+
+        await DbContext.Database.EnsureCreatedAsync();
+        // await DbContext.Database.MigrateAsync();
+        
+        await InitializeRespawner();
     }
 
     private async Task InitializeRespawner()
     {
         _dbConnection =
-            new SqlConnection(
-                "Server=.; Database=OnlineShopPouya;User Id=sa; password=symbian;TrustServerCertificate=True");
+            new SqlConnection(_connectionString);
 
         await _dbConnection.OpenAsync();
         _respawner = await Respawner.CreateAsync(_dbConnection, new RespawnerOptions()
@@ -48,5 +53,5 @@ public class DatabaseFixture: IAsyncLifetime
         });
     }
 
-    public Task DisposeAsync()=>Task.CompletedTask;
+    public async Task DisposeAsync()=> await DbContext.Database.EnsureDeletedAsync();
 }

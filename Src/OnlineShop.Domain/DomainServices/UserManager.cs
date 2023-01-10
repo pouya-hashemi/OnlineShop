@@ -19,7 +19,9 @@ public class UserManager:IUserManager
         _hashManager = hashManager;
     }
 
-    public async Task<User> CreateUserAsync(string username, string password, string passwordReEnter, string userTitle,CancellationToken cancellationToken=default)
+    public async Task<User> CreateUserAsync(string username, string password, string passwordReEnter, string userTitle
+        ,IEnumerable<Role> roles
+        ,CancellationToken cancellationToken=default)
     {
         if (await UsernameExistAsync(username,cancellationToken: cancellationToken))
         {
@@ -30,7 +32,11 @@ public class UserManager:IUserManager
         
         ValidatePassword(password);
 
-        return new User(username, HashPassword(password), userTitle);
+        var user=new User(username, HashPassword(password), userTitle);
+
+        AddRole(user, roles);
+
+        return user;
     }
 
 
@@ -146,5 +152,32 @@ public class UserManager:IUserManager
         }
 
         return true;
+    }
+
+    public void AddRole(User user,Role role)
+    {
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+        if (role is null)
+        {
+            throw new ArgumentNullException(nameof(role));
+        }
+        
+        user.Roles.Add(role);
+        
+    }
+    public void AddRole(User user,IEnumerable<Role> roles)
+    {
+        if (roles is null)
+        {
+            throw new ArgumentNullException(nameof(roles));
+        }
+        foreach (var role in roles)
+        {
+            AddRole(user,role);
+        }
+        
     }
 }

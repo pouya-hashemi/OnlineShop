@@ -10,6 +10,7 @@ public class User:EntityBase<long>
     public string Username { get;private set; }
     public string Password { get;private set; }
     public string UserTitle { get;private set; }
+    public ICollection<Role> Roles { get; set; }
     
 
     public User(string username,string password,string userTitle)
@@ -17,6 +18,7 @@ public class User:EntityBase<long>
         Username = ValidateUsername(username);
         Password = ValidatePassword(password);
         UserTitle = ValidateUserTitle(userTitle);
+        Roles = new List<Role>();
     }
 
 

@@ -9,9 +9,21 @@ public class UserEntityConfiguration:IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.Property(p => p.Username).HasMaxLength(UserPropertyConfiguration.UsernameMaxLength);
-        builder.Property(p => p.Password).HasMaxLength(UserPropertyConfiguration.PasswordHashLength);
-        builder.Property(p => p.UserTitle).HasMaxLength(UserPropertyConfiguration.UserTitleMaxLength);
+        builder
+            .Property(p => p.Username)
+            .HasMaxLength(UserPropertyConfiguration.UsernameMaxLength);
+        
+        builder
+            .Property(p => p.Password)
+            .HasMaxLength(UserPropertyConfiguration.PasswordHashLength);
+        
+        builder
+            .Property(p => p.UserTitle)
+            .HasMaxLength(UserPropertyConfiguration.UserTitleMaxLength);
+
+        builder
+            .HasMany(s => s.Roles)
+            .WithMany(s => s.Users);
 
         builder.HasIndex(p => p.Username).IsUnique();
     }

@@ -8,6 +8,7 @@ public interface IAppDbContext
 {
     DbSet<User> Users { get; set; }
     DbSet<Role> Roles { get; set; }
+    DbSet<Category> Categories { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
      DatabaseFacade Database { get;  }
 }

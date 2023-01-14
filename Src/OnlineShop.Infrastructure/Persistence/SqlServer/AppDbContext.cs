@@ -14,6 +14,7 @@ public class AppDbContext:DbContext,IAppDbContext
     }
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

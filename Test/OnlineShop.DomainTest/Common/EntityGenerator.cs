@@ -11,4 +11,5 @@ public class EntityGenerator
         new string(Enumerable.Repeat('a',UserPropertyConfiguration.UserTitleMinLength).ToArray()));
     
     public Role GenerateRole =>  new Role(new string(Enumerable.Repeat('a',RolePropertyConfiguration.NameMaxLength).ToArray()));
+    public Category GenerateCategory =>  new Category(new string(Enumerable.Repeat('a',CategoryPropertyConfiguration.NameMaxLength).ToArray()));
 }

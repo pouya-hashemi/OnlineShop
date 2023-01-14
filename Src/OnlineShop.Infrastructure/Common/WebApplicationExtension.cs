@@ -10,11 +10,21 @@ public static class WebApplicationExtension
 {
     public static WebApplication ApplyMigrations(this WebApplication app)
     {
-        using var scope = app.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
-        Console.WriteLine("--> Migrating...");
-        db.Database.Migrate();
-        Console.WriteLine("--> Migration Done");
+        Console.WriteLine("--> Starting Migration...");
+        using var scope=app.Services.CreateScope();
+        
+        var dbContext=scope.ServiceProvider.GetService<IAppDbContext>();
+        if (dbContext is null)
+        {
+            Console.WriteLine("--> Migration failed.");
+            Console.WriteLine("--> IAppDbContext Couldn't Initialized");
+            return app;
+        }
+
+        dbContext.Database.EnsureCreated();
+        
+        Console.WriteLine("--> Migration Complete...");
+        
         return app;
     }
 }

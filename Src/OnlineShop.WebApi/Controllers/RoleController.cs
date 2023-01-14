@@ -2,9 +2,6 @@
 using OnlineShop.Application.ApplicationServices.RoleServices.Commands;
 using OnlineShop.Application.ApplicationServices.RoleServices.Queries;
 using OnlineShop.Application.ApplicationServices.RoleServices.Responses;
-using OnlineShop.Application.ApplicationServices.UserServices.Commands;
-using OnlineShop.Application.ApplicationServices.UserServices.Queries;
-using OnlineShop.Application.ApplicationServices.UserServices.Responses;
 using OnlineShop.Application.Common;
 using OnlineShop.WebApi.Common;
 using OnlineShop.WebApi.Exceptions;

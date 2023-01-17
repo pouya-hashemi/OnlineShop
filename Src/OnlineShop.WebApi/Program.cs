@@ -1,3 +1,4 @@
+using Microsoft.Extensions.FileProviders;
 using OnlineShop.Application.Common;
 using OnlineShop.Domain.Common;
 using OnlineShop.Infrastructure.Common;
@@ -10,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddDomain();
-builder.Services.AddApplication();
+builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddWebApi();
 
@@ -27,6 +28,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(builder.Configuration["FileStoringBasePath"]),
+    RequestPath = new PathString(builder.Configuration["FileDownloadBaseUrl"]),
+    EnableDefaultFiles = true
+});
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -34,7 +42,6 @@ app.UseAuthorization();
 app.UseMiddleware<AppExceptionHandlerMiddleware>();
 
 app.MapControllers();
-
 
 
 app.Run();

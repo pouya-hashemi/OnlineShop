@@ -7,11 +7,13 @@ namespace OnlineShop.Domain.Entities;
 public class Category : EntityBase<int>
 {
     public string Name { get; private set; }
+    public ICollection<Product> Products { get;private set; }
 
 
     public Category(string name)
     {
         SetName(name);
+        Products = new List<Product>();
     }
 
     #region Validators

@@ -9,6 +9,7 @@ public interface IAppDbContext
     DbSet<User> Users { get; set; }
     DbSet<Role> Roles { get; set; }
     DbSet<Category> Categories { get; set; }
+    DbSet<Product> Products { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
      DatabaseFacade Database { get;  }
 }

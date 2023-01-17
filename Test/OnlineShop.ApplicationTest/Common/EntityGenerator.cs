@@ -12,6 +12,9 @@ public class EntityGenerator
     public Role GenerateRole =>  new Role(new string(Enumerable.Repeat('a',RolePropertyConfiguration.NameMaxLength).ToArray()));
     
     public Category GenerateCategory =>  new Category(new string(Enumerable.Repeat('a',CategoryPropertyConfiguration.NameMaxLength).ToArray()));
+    public Product GenerateProduct =>  new Product(new string(Enumerable.Repeat('a',ProductPropertyConfiguration.NameMinLength).ToArray()),
+        new string(Enumerable.Repeat('a',ProductPropertyConfiguration.ImageUrlMinLength).ToArray()),ProductPropertyConfiguration.PriceMinValue,ProductPropertyConfiguration.QuantityMinValue,GenerateCategory);
+
 
 
 }

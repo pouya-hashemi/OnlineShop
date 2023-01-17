@@ -3,8 +3,8 @@ using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
-using OnlineShop.DomainTest.Common;
 using OnlineShop.DomainTest.Fixtures;
+using OnlineShop.TestShareContent.DataGenerators;
 
 namespace OnlineShop.DomainTest.DomainServiceTests;
 

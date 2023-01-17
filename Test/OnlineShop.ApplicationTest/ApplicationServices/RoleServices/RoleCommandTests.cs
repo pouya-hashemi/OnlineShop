@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Application.ApplicationServices.RoleServices.Commands;
-using OnlineShop.ApplicationTest.Common;
 using OnlineShop.ApplicationTest.Fixtures;
 using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
+using OnlineShop.TestShareContent.DataGenerators;
 
 namespace OnlineShop.ApplicationTest.ApplicationServices.RoleServices;
 

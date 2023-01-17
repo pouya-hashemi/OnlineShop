@@ -16,7 +16,7 @@ public class FileService : IFileService
 
     public async Task<string> SaveImageFile(IFormFile file)
     {
-        var acceptedExtensions = new string[] {"jpg", "jpeg"};
+        var acceptedExtensions = new string[] {".jpg", ".jpeg"};
         var maxImageSize = 5000000;
 
         var fileExtension = Path.GetExtension(file.FileName);
@@ -26,7 +26,7 @@ public class FileService : IFileService
             throw new ArgumentNullException("Base file path in app setting");
         }
 
-        if (acceptedExtensions.Contains(fileExtension))
+        if (!acceptedExtensions.Contains(fileExtension))
         {
             throw new FileExtensionException(String.Join(',', acceptedExtensions));
         }
@@ -56,7 +56,7 @@ public class FileService : IFileService
 
     public void RemoveFile(string path)
     {
-        if (Directory.Exists(path))
+        if (File.Exists(path))
         {
             File.Delete(path);
         }

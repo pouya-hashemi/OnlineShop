@@ -1,7 +1,7 @@
 ﻿using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions;
-using OnlineShop.DomainTest.Common;
+using OnlineShop.TestShareContent.DataGenerators;
 
 namespace OnlineShop.DomainTest.EntitiesTests;
 

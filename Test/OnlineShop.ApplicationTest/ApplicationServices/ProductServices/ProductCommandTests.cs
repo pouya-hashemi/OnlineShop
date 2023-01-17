@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OnlineShop.Application.ApplicationServices.ProductServices.Commands;
-using OnlineShop.ApplicationTest.Common;
 using OnlineShop.ApplicationTest.Fixtures;
 using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Entities;
@@ -11,7 +8,9 @@ using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions.BaseExceptions;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
-using OnlineShop.Infrastructure.Services;
+using OnlineShop.TestShareContent.Common;
+using OnlineShop.TestShareContent.DataGenerators;
+using FileServiceFixture = OnlineShop.TestShareContent.SharedFixtures.FileServiceFixture;
 
 namespace OnlineShop.ApplicationTest.ApplicationServices.ProductServices;
 
@@ -50,7 +49,7 @@ public class ProductCommandTests : IAsyncLifetime, IClassFixture<FileServiceFixt
             Price = productSample.Price,
             Quantity = productSample.Quantity,
             CategoryId = 1,
-            ImageFile = _formFileGenerator.CreateImageFormFile(),
+            ImageFile = _formFileGenerator.CreateImageFormFileJpg(),
             ProductName = productSample.Name
         };
         var handler = new CreateProductHandler(_context, _productManager, _fileService);
@@ -95,7 +94,7 @@ public class ProductCommandTests : IAsyncLifetime, IClassFixture<FileServiceFixt
 
         var handler = new CreateProductHandler(_context, _productManager, _fileService);
         command.CategoryId = category.Id;
-        command.ImageFile = _formFileGenerator.CreateImageFormFile();
+        command.ImageFile = _formFileGenerator.CreateImageFormFileJpg();
         //Act
         var product = await handler.Handle(command, default);
         //Assert
@@ -254,7 +253,7 @@ public class ProductCommandTests : IAsyncLifetime, IClassFixture<FileServiceFixt
         var command = new ChangeProductImageCommand()
         {
             ProductId = productInDb.Id,
-            ImageFile = _formFileGenerator.CreateImageFormFile()
+            ImageFile = _formFileGenerator.CreateImageFormFileJpg()
         };
         //Act
          await handler.Handle(command, default);

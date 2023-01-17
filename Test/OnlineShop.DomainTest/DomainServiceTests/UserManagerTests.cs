@@ -7,8 +7,8 @@ using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Exceptions.BaseExceptions;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
-using OnlineShop.DomainTest.Common;
 using OnlineShop.DomainTest.Fixtures;
+using OnlineShop.TestShareContent.DataGenerators;
 
 namespace OnlineShop.DomainTest.DomainServiceTests;
 
@@ -49,6 +49,7 @@ public class UserManagerTests : IAsyncLifetime
         //Assert
         await Assert.ThrowsAsync<AlreadyExistException>(act);
     }
+    
     
 
 

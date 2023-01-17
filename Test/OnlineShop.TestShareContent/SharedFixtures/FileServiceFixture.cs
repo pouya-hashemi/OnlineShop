@@ -1,12 +1,12 @@
-﻿using OnlineShop.ApplicationTest.Common;
-using OnlineShop.Domain.Interfaces;
+﻿using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Services;
+using OnlineShop.TestShareContent.Common;
 
-namespace OnlineShop.ApplicationTest.Fixtures;
+namespace OnlineShop.TestShareContent.SharedFixtures;
 
 public class FileServiceFixture:IDisposable
 {
-    public IFileService FileService { get; set; }
+    public IFileService FileService { get;private set; }
     private readonly string _baseFilePath ;
     public FileServiceFixture()
     {

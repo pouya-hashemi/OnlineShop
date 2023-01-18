@@ -8,7 +8,7 @@ using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 
 namespace OnlineShop.Domain.DomainServices;
 
-public class UserManager:IUserManager
+public class UserManager : IUserManager
 {
     private readonly IAppDbContext _dbContext;
     private readonly HashManager _hashManager;
@@ -19,20 +19,31 @@ public class UserManager:IUserManager
         _hashManager = hashManager;
     }
 
+    /// <summary>
+    /// validates and create a valid user entity
+    /// </summary>
+    /// <param name="username"></param>
+    /// <param name="password"></param>
+    /// <param name="passwordReEnter"></param>
+    /// <param name="userTitle"></param>
+    /// <param name="roles"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>a valid user entity</returns>
+    /// <exception cref="AlreadyExistException">userName must be uniq </exception>
     public async Task<User> CreateUserAsync(string username, string password, string passwordReEnter, string userTitle
-        ,IEnumerable<Role> roles
-        ,CancellationToken cancellationToken=default)
+        , IEnumerable<Role> roles
+        , CancellationToken cancellationToken = default)
     {
-        if (await UsernameExistAsync(username,cancellationToken: cancellationToken))
+        if (await UsernameExistAsync(username, cancellationToken: cancellationToken))
         {
             throw new AlreadyExistException(nameof(username), username);
         }
 
         ValidatePasswordReEnter(password, passwordReEnter);
-        
+
         ValidatePassword(password);
 
-        var user=new User(username, HashPassword(password), userTitle);
+        var user = new User(username, HashPassword(password), userTitle);
 
         AddRole(user, roles);
 
@@ -97,13 +108,20 @@ public class UserManager:IUserManager
 
     #region Setter
 
+    /// <summary>
+    /// validate and change username of user
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="username"></param>
+    /// <exception cref="ArgumentNullException">user must have value</exception>
+    /// <exception cref="AlreadyExistException">username must be unique</exception>
     public async Task ChangeUsernameAsync(User user, string username)
     {
         if (user is null)
         {
             throw new ArgumentNullException(nameof(user));
         }
-        
+
         if (await UsernameExistAsync(username, user.Id))
         {
             throw new AlreadyExistException(nameof(username), username);
@@ -112,21 +130,37 @@ public class UserManager:IUserManager
         user.SetUsername(username);
     }
 
+    /// <summary>
+    /// validate and changes userTitle of user
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="userTitle"></param>
+    /// <exception cref="ArgumentNullException">user must have value</exception>
     public void ChangeUserTitle(User user, string userTitle)
     {
         if (user is null)
         {
             throw new ArgumentNullException(nameof(user));
         }
+
         user.SetUserTitle(userTitle);
     }
 
+    /// <summary>
+    /// validate , hash and change password of user
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="password"></param>
+    /// <param name="newPassword"></param>
+    /// <param name="newPasswordReEnter"></param>
+    /// <exception cref="ArgumentNullException">user must have value</exception>
     public void ChangePassword(User user, string password, string newPassword, string newPasswordReEnter)
     {
         if (user is null)
         {
             throw new ArgumentNullException(nameof(user));
         }
+
         ValidatePasswordReEnter(newPassword, newPasswordReEnter);
 
         ValidatePassword(newPassword);
@@ -140,10 +174,15 @@ public class UserManager:IUserManager
     {
         return _hashManager.CreateHash(password);
     }
-    
 
     #endregion
 
+    /// <summary>
+    /// determines if user is deletable or not
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException">User does not exists in database</exception>
     public bool IsDeletable(User user)
     {
         if (user is null)
@@ -154,30 +193,43 @@ public class UserManager:IUserManager
         return true;
     }
 
-    public void AddRole(User user,Role role)
+    /// <summary>
+    /// Adds new role to user
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="role"></param>
+    /// <exception cref="ArgumentNullException">user must have value</exception>
+    public void AddRole(User user, Role role)
     {
         if (user is null)
         {
             throw new ArgumentNullException(nameof(user));
         }
+
         if (role is null)
         {
             throw new ArgumentNullException(nameof(role));
         }
-        
+
         user.Roles.Add(role);
-        
     }
-    public void AddRole(User user,IEnumerable<Role> roles)
+
+    /// <summary>
+    /// Adds multiple role to user
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="roles"></param>
+    /// <exception cref="ArgumentNullException">user must have value</exception>
+    public void AddRole(User user, IEnumerable<Role> roles)
     {
         if (roles is null)
         {
             throw new ArgumentNullException(nameof(roles));
         }
+
         foreach (var role in roles)
         {
-            AddRole(user,role);
+            AddRole(user, role);
         }
-        
     }
 }

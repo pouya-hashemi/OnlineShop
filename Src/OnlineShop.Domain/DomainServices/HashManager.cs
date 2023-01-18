@@ -5,6 +5,12 @@ namespace OnlineShop.Domain.DomainServices;
 
 public class HashManager
 {
+    /// <summary>
+    /// hash the input text with SHA256 Method
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns>Hashed value of input text</returns>
+    /// <exception cref="ArgumentException">text must have value</exception>
     public string CreateHash(string text)
     {
         if (string.IsNullOrWhiteSpace(text))

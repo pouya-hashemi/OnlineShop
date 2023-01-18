@@ -7,7 +7,7 @@ namespace OnlineShop.Domain.Entities;
 public class Category : EntityBase<int>
 {
     public string Name { get; private set; }
-    public ICollection<Product> Products { get;private set; }
+    public ICollection<Product> Products { get; private set; }
 
 
     public Category(string name)
@@ -37,6 +37,10 @@ public class Category : EntityBase<int>
 
     #region Setters
 
+    /// <summary>
+    /// validate, trim and change name property of this category
+    /// </summary>
+    /// <param name="name"></param>
     internal void SetName(string name)
     {
         Name = ValidateName(name).Trim();

@@ -14,6 +14,10 @@ public interface ICategoryManager
     /// <exception cref="ArgumentNullException">category and name must have value</exception>
     /// <exception cref="AlreadyExistException">Duplicate Name</exception>
     Task ChangeNameAsync(Category category, string name, CancellationToken cancellationToken = default);
-
+    /// <summary>
+    /// Throws proper exception if data cant be deleted
+    /// </summary>
+    /// <param name="category"></param>
+    /// <returns></returns>
     Task IsDeletable(Category category);
 }

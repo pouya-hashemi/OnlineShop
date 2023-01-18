@@ -11,7 +11,7 @@ public class Role : EntityBase<int>
 
     public Role(string name)
     {
-        this.Name = ValidateName(name);
+        SetName(name);
     }
 
     #region Validations
@@ -27,7 +27,7 @@ public class Role : EntityBase<int>
         {
             throw new MaxLengthException(nameof(name), RolePropertyConfiguration.NameMaxLength);
         }
-        
+
         return name;
     }
 
@@ -35,6 +35,10 @@ public class Role : EntityBase<int>
 
     #region Setters
 
+    /// <summary>
+    /// Validate and change name of role
+    /// </summary>
+    /// <param name="name"></param>
     internal void SetName(string name)
     {
         this.Name = ValidateName(name);

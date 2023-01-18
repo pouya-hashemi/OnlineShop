@@ -12,16 +12,18 @@ public class Product : EntityBase<long>
     public int Quantity { get; private set; }
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
-    
-    private Product(){}
+
+    private Product()
+    {
+    }
+
     public Product(string name, string imageUrl, decimal price, int quantity, Category category)
     {
-        Name = ValidateName(name);
-        ImageUrl = ValidateImageURl(imageUrl);
-        Price = ValidatePrice(price);
-        Quantity = ValidateQuantity(quantity);
-        Category = ValidateCategory(category);
-        CategoryId = category.Id;
+        SetName(name);
+        SetImageUrl(imageUrl);
+        SetPrice(price);
+        SetQuantity(quantity);
+        SetCategory(category);
     }
 
     #region Validators
@@ -90,26 +92,46 @@ public class Product : EntityBase<long>
 
     #region Setters
 
+    /// <summary>
+    /// Validate, Trim and Change name property of product
+    /// </summary>
+    /// <param name="name"></param>
     internal void SetName(string name)
     {
-        Name = ValidateName(name);
+        Name = ValidateName(name).Trim();
     }
 
+    /// <summary>
+    /// Validate, change ImagePath property of product
+    /// </summary>
+    /// <param name="imageUrl"></param>
     internal void SetImageUrl(string imageUrl)
     {
         ImageUrl = ValidateImageURl(imageUrl);
     }
 
+    /// <summary>
+    /// Validate and change price property of product
+    /// </summary>
+    /// <param name="price"></param>
     internal void SetPrice(decimal price)
     {
         Price = ValidatePrice(price);
     }
 
+    /// <summary>
+    /// Validate and change quantity property of product
+    /// </summary>
+    /// <param name="quantity"></param>
     internal void SetQuantity(int quantity)
     {
         Quantity = ValidateQuantity(quantity);
     }
 
+    /// <summary>
+    /// validate and change category and categoryId property of product
+    /// </summary>
+    /// <param name="category"></param>
     internal void SetCategory(Category category)
     {
         Category = ValidateCategory(category);

@@ -22,6 +22,7 @@ public class ProductManagerTests:IAsyncLifetime
         _resetDatabase = databaseFixture.ResetDatabaseAsync;
         _entityGenerator = new EntityGenerator();
         _productManager = new ProductManager(_context);
+        
     }
 
     public static IEnumerable<object[]>
@@ -43,7 +44,6 @@ public class ProductManagerTests:IAsyncLifetime
         productInDb.SetName(name);
         _context.Products.Add(productInDb);
         await _context.SaveChangesAsync();
-
         var productToUpdate = _entityGenerator.GenerateProduct;
 
         //Act

@@ -12,6 +12,7 @@ public class Product : EntityBase<long>
     public int Quantity { get; private set; }
     public int CategoryId { get; private set; }
     public Category Category { get; private set; }
+    public ICollection<Cart> Carts { get; set; }
 
     private Product()
     {
@@ -24,6 +25,7 @@ public class Product : EntityBase<long>
         SetPrice(price);
         SetQuantity(quantity);
         SetCategory(category);
+        Carts = new List<Cart>();
     }
 
     #region Validators

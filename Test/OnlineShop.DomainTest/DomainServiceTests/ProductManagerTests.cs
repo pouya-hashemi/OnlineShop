@@ -5,23 +5,24 @@ using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 using OnlineShop.DomainTest.Fixtures;
 using OnlineShop.TestShareContent.DataGenerators;
+using OnlineShop.TestShareContent.SharedFixtures;
 
 namespace OnlineShop.DomainTest.DomainServiceTests;
 
 [Collection("Database collection")]
-public class ProductManagerTests:IAsyncLifetime
+public class ProductManagerTests:IAsyncLifetime,IClassFixture<FileServiceFixture>
 {
     private readonly IAppDbContext _context;
     private readonly Func<Task> _resetDatabase;
     private readonly EntityGenerator _entityGenerator;
     private readonly IProductManager _productManager;
 
-    public ProductManagerTests(DatabaseFixture databaseFixture)
+    public ProductManagerTests(DatabaseFixture databaseFixture,FileServiceFixture fileServiceFixture)
     {
         _context = databaseFixture.DbContext;
         _resetDatabase = databaseFixture.ResetDatabaseAsync;
         _entityGenerator = new EntityGenerator();
-        _productManager = new ProductManager(_context);
+        _productManager = new ProductManager(_context,fileServiceFixture.FileService);
         
     }
 
@@ -79,7 +80,7 @@ public class ProductManagerTests:IAsyncLifetime
     //********************************************************************//
     
     public static IEnumerable<object[]>
-        CreateCategory_ShouldThrowAlreadyExistsException_WhenNameIsDuplicated_Data()
+        CreateProduct_ShouldThrowAlreadyExistsException_WhenNameIsDuplicated_Data()
     {
         yield return new object[]
         {
@@ -88,8 +89,8 @@ public class ProductManagerTests:IAsyncLifetime
     }
 
     [Theory]
-    [MemberData(nameof(CreateCategory_ShouldThrowAlreadyExistsException_WhenNameIsDuplicated_Data))]
-    public async Task CreateCategory_ShouldThrowAlreadyExistsException_WhenNameIsDuplicated(string name)
+    [MemberData(nameof(CreateProduct_ShouldThrowAlreadyExistsException_WhenNameIsDuplicated_Data))]
+    public async Task CreateProduct_ShouldThrowAlreadyExistsException_WhenNameIsDuplicated(string name)
     {
         //Arrange
 
@@ -101,7 +102,7 @@ public class ProductManagerTests:IAsyncLifetime
         var correctProduct = _entityGenerator.GenerateProduct;
 
         //Act
-        var act = async () => { await _productManager.CreateProductAsync(name,correctProduct.ImageUrl,correctProduct.Price,correctProduct.Quantity,correctProduct.Category); };
+        var act = async () => { await _productManager.CreateProductAsync(name,correctProduct.ImagePath,correctProduct.Price,correctProduct.Quantity,correctProduct.Category); };
 
         //Assert
         await Assert.ThrowsAsync<AlreadyExistException>(act);
@@ -109,7 +110,7 @@ public class ProductManagerTests:IAsyncLifetime
     //********************************************************************//
     
      public static IEnumerable<object[]>
-        CreateCategory_ShouldReturnProduct_WhenDataIsCorrect_Data()
+        CreateProduct_ShouldReturnProduct_WhenDataIsCorrect_Data()
     {
         yield return new object[]
         {
@@ -118,13 +119,13 @@ public class ProductManagerTests:IAsyncLifetime
     }
 
     [Theory]
-    [MemberData(nameof(CreateCategory_ShouldReturnProduct_WhenDataIsCorrect_Data))]
-    public async Task CreateCategory_ShouldReturnProduct_WhenDataIsCorrect(Product product)
+    [MemberData(nameof(CreateProduct_ShouldReturnProduct_WhenDataIsCorrect_Data))]
+    public async Task CreateProduct_ShouldReturnProduct_WhenDataIsCorrect(Product product)
     {
         //Arrange
 
         //Act
-       var productCreated=await _productManager.CreateProductAsync(product.Name,product.ImageUrl,product.Price,product.Quantity,product.Category); 
+       var productCreated=await _productManager.CreateProductAsync(product.Name,product.ImagePath,product.Price,product.Quantity,product.Category); 
 
         //Assert
         Assert.Equivalent(product, productCreated);

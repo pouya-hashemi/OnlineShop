@@ -8,14 +8,14 @@ public interface IProductManager
     /// validates all the inputs and create a valid product
     /// </summary>
     /// <param name="name"></param>
-    /// <param name="imageUrl">path of the image</param>
+    /// <param name="imagePath">path of the image</param>
     /// <param name="price"></param>
     /// <param name="quantity"></param>
     /// <param name="category"></param>
     /// <param name="cancellationToken"></param>
     /// <returns>a valid product entity</returns>
     /// <exception cref="AlreadyExistException">name should uniq</exception>
-    Task<Product> CreateProductAsync(string name, string imageUrl, decimal price, int quantity, Category category,
+    Task<Product> CreateProductAsync(string name, string imagePath, decimal price, int quantity, Category category,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -32,9 +32,9 @@ public interface IProductManager
     /// validate and change imageUrl of product
     /// </summary>
     /// <param name="product"></param>
-    /// <param name="imageUrl"></param>
+    /// <param name="imagePath"></param>
     /// <exception cref="ArgumentNullException">product must have value</exception>
-    void ChangeImageUrl(Product product, string imageUrl);
+    void ChangeImagePath(Product product, string imagePath);
 
     /// <summary>
     /// validate and change price property of product

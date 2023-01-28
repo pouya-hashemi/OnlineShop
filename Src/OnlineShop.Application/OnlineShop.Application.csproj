@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="ApplicationServices\CartServices\Validators" />
       <Folder Include="ApplicationServices\ProductServices\Validations" />
       <Folder Include="ApplicationServices\RoleServices\Validations" />
     </ItemGroup>

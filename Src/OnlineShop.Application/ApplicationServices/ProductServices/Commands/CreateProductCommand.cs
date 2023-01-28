@@ -35,7 +35,7 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Produc
 
     public async Task<ProductDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var imageUrl = await _fileService.SaveImageFile(request.ImageFile);
+        var imagePath = await _fileService.SaveImageFileAsync(request.ImageFile);
         
         var category = await _context.Categories
             .Where(w => w.Id == request.CategoryId)
@@ -47,7 +47,7 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, Produc
         }
 
         var product =
-            await _productManager.CreateProductAsync(request.ProductName, imageUrl, request.Price, request.Quantity, category,cancellationToken);
+            await _productManager.CreateProductAsync(request.ProductName, imagePath, request.Price, request.Quantity, category,cancellationToken);
 
         _context.Products.Add(product);
         await _context.SaveChangesAsync(cancellationToken);

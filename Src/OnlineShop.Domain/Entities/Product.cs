@@ -7,7 +7,8 @@ namespace OnlineShop.Domain.Entities;
 public class Product : EntityBase<long>
 {
     public string Name { get; private set; }
-    public string ImageUrl { get; private set; }
+    public string ImagePath { get; private set; }
+    public string ImageUrl { get;private set; }
     public decimal Price { get; private set; }
     public int Quantity { get; private set; }
     public int CategoryId { get; private set; }
@@ -18,15 +19,18 @@ public class Product : EntityBase<long>
     {
     }
 
-    public Product(string name, string imageUrl, decimal price, int quantity, Category category)
+    public Product(string name, string imagePath, decimal price, int quantity, Category category,string imageUrl)
     {
         SetName(name);
-        SetImageUrl(imageUrl);
+        SetImagePath(imagePath);
         SetPrice(price);
         SetQuantity(quantity);
         SetCategory(category);
+        SetImageUrl(imageUrl);
         Carts = new List<Cart>();
     }
+
+    
 
     #region Validators
 
@@ -75,7 +79,22 @@ public class Product : EntityBase<long>
         return name;
     }
 
-    private string ValidateImageURl(string imageUrl)
+    private string ValidateImagePath(string imagePath)
+    {
+        if (String.IsNullOrWhiteSpace(imagePath))
+        {
+            throw new NullOrEmptyException("image");
+        }
+
+        if (imagePath.Length > ProductPropertyConfiguration.ImagePathMaxLength)
+        {
+            throw new MaxLengthException(nameof(imagePath), ProductPropertyConfiguration.ImagePathMaxLength);
+        }
+
+        return imagePath;
+    }
+    
+    private string ValidateImageUrl(string imageUrl)
     {
         if (String.IsNullOrWhiteSpace(imageUrl))
         {
@@ -107,9 +126,9 @@ public class Product : EntityBase<long>
     /// Validate, change ImagePath property of product
     /// </summary>
     /// <param name="imageUrl"></param>
-    internal void SetImageUrl(string imageUrl)
+    internal void SetImagePath(string imagePath)
     {
-        ImageUrl = ValidateImageURl(imageUrl);
+        ImagePath = ValidateImagePath(imagePath);
     }
 
     /// <summary>
@@ -139,6 +158,16 @@ public class Product : EntityBase<long>
         Category = ValidateCategory(category);
         CategoryId = category.Id;
     }
+    /// <summary>
+    /// validate and change imageUrl property of product
+    /// </summary>
+    /// <param name="imageUrl"></param>
+    internal void SetImageUrl(string imageUrl)
+    {
+        ImageUrl = ValidateImageUrl(imageUrl);
+    }
+
+    
 
     #endregion
 }

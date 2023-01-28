@@ -13,7 +13,10 @@ public class EntityGenerator
     
     public Category GenerateCategory =>  new Category(new string(Enumerable.Repeat('a',CategoryPropertyConfiguration.NameMaxLength).ToArray()));
     public Product GenerateProduct =>  new Product(new string(Enumerable.Repeat('a',ProductPropertyConfiguration.NameMinLength).ToArray()),
-        new string(Enumerable.Repeat('a',ProductPropertyConfiguration.ImageUrlMinLength).ToArray()),ProductPropertyConfiguration.PriceMinValue,ProductPropertyConfiguration.QuantityMinValue,GenerateCategory);
+        new string(Enumerable.Repeat('a',ProductPropertyConfiguration.ImagePathMinLength).ToArray()),ProductPropertyConfiguration.PriceMinValue,ProductPropertyConfiguration.QuantityMinValue,GenerateCategory
+    ,new string(Enumerable.Repeat('a',ProductPropertyConfiguration.ImageUrlMinLength).ToArray()));
+
+    public Cart GenerateCart =>  new Cart(Guid.NewGuid().ToString(),GenerateProduct,CartPropertyConfigurations.MinQuantity,CartPropertyConfigurations.MinPrice);
 
 
 }

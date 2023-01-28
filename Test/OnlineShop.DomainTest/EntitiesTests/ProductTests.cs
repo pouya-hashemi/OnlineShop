@@ -90,7 +90,7 @@ public class ProductTests
 
     //****************************************************************//
     public static IEnumerable<object[]>
-        SetImageUrl_ShouldThrowNullOrEmptyException_WhenImageUrlIsNullOrWhiteSpace_Data()
+        SetImagePath_ShouldThrowNullOrEmptyException_WhenImagePathIsNullOrWhiteSpace_Data()
     {
         yield return new object[]
         {
@@ -107,61 +107,61 @@ public class ProductTests
     }
 
     [Theory]
-    [MemberData(nameof(SetImageUrl_ShouldThrowNullOrEmptyException_WhenImageUrlIsNullOrWhiteSpace_Data))]
-    public void SetImageUrl_ShouldThrowNullOrEmptyException_WhenImageUrlIsNullOrWhiteSpace(string imageUrl)
+    [MemberData(nameof(SetImagePath_ShouldThrowNullOrEmptyException_WhenImagePathIsNullOrWhiteSpace_Data))]
+    public void SetImagePath_ShouldThrowNullOrEmptyException_WhenImagePathIsNullOrWhiteSpace(string imagePath)
     {
         //Arrange
         var product = _entityGenerator.GenerateProduct;
         //Act
-        var act = () => { product.SetImageUrl(imageUrl); };
+        var act = () => { product.SetImagePath(imagePath); };
         //Assert
         Assert.Throws<NullOrEmptyException>(act);
     }
 
     //****************************************************************//
-    public static IEnumerable<object[]> SetImageUrl_ShouldThrowMaxLengthException_WhenImageUrlIsTooLong_Data()
+    public static IEnumerable<object[]> SetImagePath_ShouldThrowMaxLengthException_WhenImagePathIsTooLong_Data()
     {
         yield return new object[]
         {
-            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImageUrlMaxLength + 1).ToArray())
+            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImagePathMaxLength + 1).ToArray())
         };
     }
 
     [Theory]
-    [MemberData(nameof(SetImageUrl_ShouldThrowMaxLengthException_WhenImageUrlIsTooLong_Data))]
-    public void SetImageUrl_ShouldThrowMaxLengthException_WhenImageUrlIsTooLong(string imageUrl)
+    [MemberData(nameof(SetImagePath_ShouldThrowMaxLengthException_WhenImagePathIsTooLong_Data))]
+    public void SetImagePath_ShouldThrowMaxLengthException_WhenImagePathIsTooLong(string imagePath)
     {
         //Arrange
         var product = _entityGenerator.GenerateProduct;
         //Act
-        var act = () => { product.SetImageUrl(imageUrl); };
+        var act = () => { product.SetImagePath(imagePath); };
         //Assert
         Assert.Throws<MaxLengthException>(act);
     }
 
     //****************************************************************//
-    public static IEnumerable<object[]> SetImageUrl_ShouldChangeImageUrl_WhenDataIsCorrect_Data()
+    public static IEnumerable<object[]> SetImagePath_ShouldChangeImagePath_WhenDataIsCorrect_Data()
     {
         yield return new object[]
         {
-            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImageUrlMaxLength).ToArray())
+            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImagePathMaxLength).ToArray())
         };
         yield return new object[]
         {
-            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImageUrlMinLength).ToArray())
+            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImagePathMinLength).ToArray())
         };
     }
 
     [Theory]
-    [MemberData(nameof(SetImageUrl_ShouldChangeImageUrl_WhenDataIsCorrect_Data))]
-    public void SetImageUrl_ShouldChangeImageUrl_WhenDataIsCorrect(string imageUrl)
+    [MemberData(nameof(SetImagePath_ShouldChangeImagePath_WhenDataIsCorrect_Data))]
+    public void SetImagePath_ShouldChangeImagePath_WhenDataIsCorrect(string imagePath)
     {
         //Arrange
         var product = _entityGenerator.GenerateProduct;
         //Act
-        product.SetImageUrl(imageUrl);
+        product.SetImagePath(imagePath);
         //Assert
-        Assert.Equal(imageUrl, product.ImageUrl);
+        Assert.Equal(imagePath, product.ImagePath);
     }
 
     //****************************************************************//
@@ -286,5 +286,81 @@ public class ProductTests
         //Assert
         Assert.Equivalent(category, product.Category);
     }
-    
+    //**************************************************************//
+     public static IEnumerable<object[]>
+        SetImageUrl_ShouldThrowNullOrEmptyException_WhenImageUrlIsNullOrWhiteSpace_Data()
+    {
+        yield return new object[]
+        {
+            null
+        };
+        yield return new object[]
+        {
+            ""
+        };
+        yield return new object[]
+        {
+            " "
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(SetImageUrl_ShouldThrowNullOrEmptyException_WhenImageUrlIsNullOrWhiteSpace_Data))]
+    public void SetImageUrl_ShouldThrowNullOrEmptyException_WhenImageUrlIsNullOrWhiteSpace(string imageUrl)
+    {
+        //Arrange
+        var product = _entityGenerator.GenerateProduct;
+        //Act
+        var act = () => { product.SetImageUrl(imageUrl); };
+        //Assert
+        Assert.Throws<NullOrEmptyException>(act);
+    }
+
+    //****************************************************************//
+    public static IEnumerable<object[]> SetImageUrl_ShouldThrowMaxLengthException_WhenImageUrlIsTooLong_Data()
+    {
+        yield return new object[]
+        {
+            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImageUrlMaxLength + 1).ToArray())
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(SetImageUrl_ShouldThrowMaxLengthException_WhenImageUrlIsTooLong_Data))]
+    public void SetImageUrl_ShouldThrowMaxLengthException_WhenImageUrlIsTooLong(string imageUrl)
+    {
+        //Arrange
+        var product = _entityGenerator.GenerateProduct;
+        //Act
+        var act = () => { product.SetImageUrl(imageUrl); };
+        //Assert
+        Assert.Throws<MaxLengthException>(act);
+    }
+
+    //****************************************************************//
+    public static IEnumerable<object[]> SetImageUrl_ShouldChangeImageUrl_WhenDataIsCorrect_Data()
+    {
+        yield return new object[]
+        {
+            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImageUrlMaxLength).ToArray())
+        };
+        yield return new object[]
+        {
+            new string(Enumerable.Repeat('a', ProductPropertyConfiguration.ImageUrlMinLength).ToArray())
+        };
+    }
+
+    [Theory]
+    [MemberData(nameof(SetImageUrl_ShouldChangeImageUrl_WhenDataIsCorrect_Data))]
+    public void SetImageUrl_ShouldChangeImageUrl_WhenDataIsCorrect(string imageUrl)
+    {
+        //Arrange
+        var product = _entityGenerator.GenerateProduct;
+        //Act
+        product.SetImageUrl(imageUrl);
+        //Assert
+        Assert.Equal(imageUrl, product.ImageUrl);
+    }
+
+    //****************************************************************//
 }

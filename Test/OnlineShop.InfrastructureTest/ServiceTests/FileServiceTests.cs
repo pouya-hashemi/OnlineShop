@@ -1,24 +1,25 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Infrastructure.Services;
-using OnlineShop.TestShareContent.Common;
+using OnlineShop.InfrastructureTest.Fixtures;
 using OnlineShop.TestShareContent.DataGenerators;
-using OnlineShop.TestShareContent.SharedFixtures;
+
 
 namespace OnlineShop.InfrastructureTest.ServiceTests;
-
-public class FileServiceTests : IAsyncLifetime, IClassFixture<FileServiceFixture>
+[Collection("Service collection")]
+public class FileServiceTests : IAsyncLifetime
 {
     private readonly IFileService _fileService;
     private readonly IConfiguration _configuration;
     private readonly FormFileGenerator _formFileGenerator;
 
-    public FileServiceTests(FileServiceFixture fileServiceFixture)
+    public FileServiceTests(ServiceFixture serviceFixture)
     {
-        var utilities = new Utilities();
-        _fileService = fileServiceFixture.FileService;
-        _configuration = utilities.Configuration;
+
+        _fileService = serviceFixture.ServiceProvider.GetService<IFileService>();
+        _configuration = serviceFixture.ServiceProvider.GetService<IConfiguration>();
         _formFileGenerator = new FormFileGenerator();
     }
 

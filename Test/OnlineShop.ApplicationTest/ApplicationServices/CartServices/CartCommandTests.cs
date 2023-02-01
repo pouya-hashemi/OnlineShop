@@ -1,38 +1,33 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Application.ApplicationServices.CartServices.Commands;
 using OnlineShop.ApplicationTest.Fixtures;
 using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Exceptions.BaseExceptions;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
-using OnlineShop.TestShareContent.Common;
 using OnlineShop.TestShareContent.DataGenerators;
-using OnlineShop.TestShareContent.SharedFixtures;
+
 
 namespace OnlineShop.ApplicationTest.ApplicationServices.CartServices;
-[Collection("Database collection")]
-public class CartCommandTests: IAsyncLifetime, IClassFixture<FileServiceFixture>
+[Collection("Service collection")]
+public class CartCommandTests: IAsyncLifetime
 {
     private readonly Func<Task> _resetDatabase;
     private readonly IAppDbContext _context;
     private readonly ICartManager _cartManager;
     private readonly IProductManager _productManager;
-    private readonly IFileService _fileService;
     private readonly EntityGenerator _entityGenerator;
     private readonly FormFileGenerator _formFileGenerator;
-    private readonly IConfiguration _configuration;
-    public CartCommandTests(DatabaseFixture databaseFixture,
-        FileServiceFixture fileServiceFixture)
+
+    public CartCommandTests(ServiceFixture databaseFixture)
     {
         _resetDatabase = databaseFixture.ResetDatabaseAsync;
         _context = databaseFixture.DbContext;
-        _cartManager = new CartManager(_context, new StockManager(_context));
+        _cartManager = databaseFixture.ServiceProvider.GetService<ICartManager>();
         _entityGenerator = new EntityGenerator();
-        _fileService = fileServiceFixture.FileService;
         _formFileGenerator = new FormFileGenerator();
-        _configuration = new Utilities().Configuration;
-        _productManager = new ProductManager(_context, _fileService);
+        _productManager = databaseFixture.ServiceProvider.GetService<IProductManager>();
     }
     
     [Fact]

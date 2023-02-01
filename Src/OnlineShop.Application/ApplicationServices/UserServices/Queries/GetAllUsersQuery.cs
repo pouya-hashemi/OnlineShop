@@ -27,16 +27,16 @@ public class GetAllUsersHandler:IRequestHandler<GetAllUsersQuery,PaginationList<
 
         if (!String.IsNullOrWhiteSpace(request.SearchValue))
         {
-            query = query.Where(w => (w.Username + " " + w.UserTitle).Contains(request.SearchValue));
+            query = query.Where(w => (w.UserName + " " + w.UserTitle).Contains(request.SearchValue));
         }
 
         var list = await query
-            .OrderBy(o => o.Username)
+            .OrderBy(o => o.UserName)
             .AddPaginate(request)
             .Select(s=>new UserDto()
             {
                 Id = s.Id,
-                Username = s.Username,
+                Username = s.UserName,
                 UserTitle = s.UserTitle,
                 
                 CreatedDateTime = s.CreatedDateTime,

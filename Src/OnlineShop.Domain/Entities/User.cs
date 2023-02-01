@@ -1,24 +1,26 @@
-﻿using OnlineShop.Domain.Common;
+﻿using Microsoft.AspNetCore.Identity;
+using OnlineShop.Domain.Common;
 using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions;
+using OnlineShop.Domain.Interfaces;
 
 
 namespace OnlineShop.Domain.Entities;
 
-public class User : EntityBase<long>
+public class User :IdentityUser<long>, IAuditableEntity
 {
-    public string Username { get; private set; }
-    public string Password { get; private set; }
     public string UserTitle { get; private set; }
-    public ICollection<Role> Roles { get; set; }
+    public long CreatedUserId { get; set; }
+    public DateTime CreatedDateTime { get; set; }
+    public long? ModifiedUserId { get; set; }
+    public DateTime? ModifiedDateTime { get; set; }
 
+    private User() { }
 
-    public User(string username, string password, string userTitle)
+    public User(string username, string userTitle)
     {
         SetUsername(username);
-        SetPassword(password);
         SetUserTitle(userTitle);
-        Roles = new List<Role>();
     }
 
 
@@ -44,20 +46,7 @@ public class User : EntityBase<long>
         return username;
     }
 
-    private string ValidatePassword(string password)
-    {
-        if (String.IsNullOrWhiteSpace(password))
-        {
-            throw new NullOrEmptyException(nameof(password));
-        }
-
-        if (password.Length != UserPropertyConfiguration.PasswordHashLength)
-        {
-            throw new LengthException(nameof(password), UserPropertyConfiguration.PasswordHashLength);
-        }
-
-        return password;
-    }
+    
 
     private string ValidateUserTitle(string userTitle)
     {
@@ -84,17 +73,9 @@ public class User : EntityBase<long>
     /// <param name="username"></param>
     internal void SetUsername(string username)
     {
-        Username = ValidateUsername(username);
+        UserName = ValidateUsername(username);
     }
 
-    /// <summary>
-    /// Validate and change hashed password property of user
-    /// </summary>
-    /// <param name="password"></param>
-    internal void SetPassword(string password)
-    {
-        Password = ValidatePassword(password);
-    }
 
     /// <summary>
     /// validate and change userTitle property of user
@@ -106,4 +87,6 @@ public class User : EntityBase<long>
     }
 
     #endregion
+
+   
 }

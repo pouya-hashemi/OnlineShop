@@ -9,7 +9,7 @@ using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 using OnlineShop.TestShareContent.DataGenerators;
 
 namespace OnlineShop.ApplicationTest.ApplicationServices.CategoryServices;
-[Collection("Database collection")]
+[Collection("Service collection")]
 public class CategoryCommandTests:IAsyncLifetime
 {
     private readonly IAppDbContext _context;
@@ -18,7 +18,7 @@ public class CategoryCommandTests:IAsyncLifetime
     private Func<Task> _resetDatabase;
 
 
-    public CategoryCommandTests(DatabaseFixture databaseFixture)
+    public CategoryCommandTests(ServiceFixture databaseFixture)
     {
         _context = databaseFixture.DbContext;
         _entityGenerator = new EntityGenerator();

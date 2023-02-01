@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Exceptions;
@@ -11,10 +12,13 @@ namespace OnlineShop.Domain.DomainServices;
 public class RoleManager : IRoleManager
 {
     private readonly IAppDbContext _context;
+    private readonly RoleManager<Role> _roleManager;
 
-    public RoleManager(IAppDbContext context)
+    public RoleManager(IAppDbContext context,
+        RoleManager<Role> roleManager)
     {
         _context = context;
+        _roleManager = roleManager;
     }
 
     /// <summary>

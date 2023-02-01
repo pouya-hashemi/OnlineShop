@@ -1,29 +1,30 @@
-﻿using OnlineShop.Domain.DomainServices;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 using OnlineShop.DomainTest.Fixtures;
 using OnlineShop.TestShareContent.DataGenerators;
-using OnlineShop.TestShareContent.SharedFixtures;
+
 
 namespace OnlineShop.DomainTest.DomainServiceTests;
 
-[Collection("Database collection")]
-public class ProductManagerTests:IAsyncLifetime,IClassFixture<FileServiceFixture>
+[Collection("Service collection")]
+public class ProductManagerTests:IAsyncLifetime
 {
     private readonly IAppDbContext _context;
     private readonly Func<Task> _resetDatabase;
     private readonly EntityGenerator _entityGenerator;
     private readonly IProductManager _productManager;
 
-    public ProductManagerTests(DatabaseFixture databaseFixture,FileServiceFixture fileServiceFixture)
+    public ProductManagerTests(ServiceFixture serviceFixture)
     {
-        _context = databaseFixture.DbContext;
-        _resetDatabase = databaseFixture.ResetDatabaseAsync;
+        _context = serviceFixture.DbContext;
+        _resetDatabase = serviceFixture.ResetDatabaseAsync;
         _entityGenerator = new EntityGenerator();
-        _productManager = new ProductManager(_context,fileServiceFixture.FileService);
-        
+        _productManager = serviceFixture.ServiceProvider.GetService<IProductManager>();
+
     }
 
     public static IEnumerable<object[]>

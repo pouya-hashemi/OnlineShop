@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Application.ApplicationServices.ProductServices.Commands;
 using OnlineShop.Application.ApplicationServices.ProductServices.Queries;
 using OnlineShop.Application.ApplicationServices.ProductServices.Responses;

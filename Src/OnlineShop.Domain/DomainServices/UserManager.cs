@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions;
@@ -11,12 +12,14 @@ namespace OnlineShop.Domain.DomainServices;
 public class UserManager : IUserManager
 {
     private readonly IAppDbContext _dbContext;
-    private readonly HashManager _hashManager;
+    private readonly UserManager<User> _userManager;
 
-    public UserManager(IAppDbContext dbContext, HashManager hashManager)
+
+    public UserManager(IAppDbContext dbContext,
+        UserManager<User> userManager)
     {
         _dbContext = dbContext;
-        _hashManager = hashManager;
+        _userManager = userManager;
     }
 
     /// <summary>
@@ -31,7 +34,6 @@ public class UserManager : IUserManager
     /// <returns>a valid user entity</returns>
     /// <exception cref="AlreadyExistException">userName must be uniq </exception>
     public async Task<User> CreateUserAsync(string username, string password, string passwordReEnter, string userTitle
-        , IEnumerable<Role> roles
         , CancellationToken cancellationToken = default)
     {
         if (await UsernameExistAsync(username, cancellationToken: cancellationToken))
@@ -43,9 +45,14 @@ public class UserManager : IUserManager
 
         ValidatePassword(password);
 
-        var user = new User(username, HashPassword(password), userTitle);
+        var user = new User(username, userTitle);
 
-        AddRole(user, roles);
+        var identityResult= await _userManager.CreateAsync(user);
+
+        if (!identityResult.Succeeded)
+        {
+            throw new BadRequestException(identityResult.Errors.Select(s => s.Description).FirstOrDefault() ?? "");
+        }
 
         return user;
     }
@@ -57,7 +64,7 @@ public class UserManager : IUserManager
         CancellationToken cancellationToken = default)
     {
         var query = _dbContext.Users
-            .Where(w => w.Username == username)
+            .Where(w => w.UserName == username)
             .AsQueryable();
         if (userId != null)
         {
@@ -78,7 +85,7 @@ public class UserManager : IUserManager
 
     private void CheckPassword(User user, string password)
     {
-        if (!String.IsNullOrWhiteSpace(user.Password) && user.Password != _hashManager.CreateHash(password))
+        if (!String.IsNullOrWhiteSpace(user.PasswordHash) && user.PasswordHash != _userManager.PasswordHasher.HashPassword(user,password))
         {
             throw new BadRequestException("your password is wrong.");
         }
@@ -127,6 +134,7 @@ public class UserManager : IUserManager
             throw new AlreadyExistException(nameof(username), username);
         }
 
+        
         user.SetUsername(username);
     }
 
@@ -154,7 +162,7 @@ public class UserManager : IUserManager
     /// <param name="newPassword"></param>
     /// <param name="newPasswordReEnter"></param>
     /// <exception cref="ArgumentNullException">user must have value</exception>
-    public void ChangePassword(User user, string password, string newPassword, string newPasswordReEnter)
+    public async Task ChangePassword(User user, string password, string newPassword, string newPasswordReEnter,CancellationToken cancellationToken=default)
     {
         if (user is null)
         {
@@ -167,12 +175,11 @@ public class UserManager : IUserManager
 
         CheckPassword(user, password);
 
-        user.SetPassword(HashPassword(newPassword));
-    }
-
-    private string HashPassword(string password)
-    {
-        return _hashManager.CreateHash(password);
+        var identityResult=await _userManager.ChangePasswordAsync(user, password, newPassword);
+        if (!identityResult.Succeeded)
+        {
+            throw new BadRequestException(identityResult.Errors.Select(s => s.Description).FirstOrDefault() ?? "");
+        }
     }
 
     #endregion
@@ -199,7 +206,7 @@ public class UserManager : IUserManager
     /// <param name="user"></param>
     /// <param name="role"></param>
     /// <exception cref="ArgumentNullException">user must have value</exception>
-    public void AddRole(User user, Role role)
+    public IdentityUserRole<long> CreateUserRole(User user, Role role)
     {
         if (user is null)
         {
@@ -211,25 +218,8 @@ public class UserManager : IUserManager
             throw new ArgumentNullException(nameof(role));
         }
 
-        user.Roles.Add(role);
+        return new IdentityUserRole<long>(){UserId = user.Id,RoleId = role.Id};
     }
 
-    /// <summary>
-    /// Adds multiple role to user
-    /// </summary>
-    /// <param name="user"></param>
-    /// <param name="roles"></param>
-    /// <exception cref="ArgumentNullException">user must have value</exception>
-    public void AddRole(User user, IEnumerable<Role> roles)
-    {
-        if (roles is null)
-        {
-            throw new ArgumentNullException(nameof(roles));
-        }
-
-        foreach (var role in roles)
-        {
-            AddRole(user, role);
-        }
-    }
+   
 }

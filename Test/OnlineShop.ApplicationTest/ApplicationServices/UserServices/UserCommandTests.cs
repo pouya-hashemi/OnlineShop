@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MockQueryable.Moq;
 using Moq;
 using OnlineShop.Application.ApplicationServices.UserServices.Commands;
-
 using OnlineShop.ApplicationTest.Fixtures;
 using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Entities;
@@ -11,9 +13,10 @@ using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 using OnlineShop.TestShareContent.DataGenerators;
 
+
 namespace OnlineShop.ApplicationTest.ApplicationServices.UserServices;
 
-[Collection("Database collection")]
+[Collection("Service collection")]
 public class UserCommandTests : IAsyncLifetime
 {
     private readonly IAppDbContext _dbContext;
@@ -21,11 +24,11 @@ public class UserCommandTests : IAsyncLifetime
     private readonly IUserManager _userManager;
     private readonly EntityGenerator _entityGenerator;
 
-    public UserCommandTests(DatabaseFixture databaseFixture)
+    public UserCommandTests(ServiceFixture serviceFixture)
     {
-        _dbContext = databaseFixture.DbContext;
-        _resetDatabase = databaseFixture.ResetDatabaseAsync;
-        _userManager = new UserManager(_dbContext, new HashManager());
+        _dbContext = serviceFixture.DbContext;
+        _resetDatabase = serviceFixture.ResetDatabaseAsync;
+        _userManager =serviceFixture.ServiceProvider.GetService<IUserManager>();
         _entityGenerator = new EntityGenerator();
     }
 
@@ -85,7 +88,7 @@ public class UserCommandTests : IAsyncLifetime
         //Assert
         var userAfterUpdate=await _dbContext.Users.FirstOrDefaultAsync(f => f.Id == user.Id);
         
-        Assert.Equal(command.Username,userAfterUpdate.Username);
+        Assert.Equal(command.Username,userAfterUpdate.UserName);
         Assert.Equal(command.UserTitle,userAfterUpdate.UserTitle);
     }
     //*************************************************************
@@ -131,18 +134,24 @@ public class UserCommandTests : IAsyncLifetime
         await Assert.ThrowsAsync<NotFoundException>(act);
     }
     //*************************************************************
-  [Fact]
-    public async Task DeleteUser_ShouldDeleteData_WhenDataIsCorrect_Data( )
+    public static IEnumerable<object[]> DeleteUser_ShouldDeleteData_WhenDataIsCorrect_Data()
+    {
+        yield return new object[]
+        {
+            new DeleteUserCommand()
+        };
+    }
+  [Theory]
+  [MemberData(nameof(DeleteUser_ShouldDeleteData_WhenDataIsCorrect_Data))]
+    public async Task DeleteUser_ShouldDeleteData_WhenDataIsCorrect(DeleteUserCommand command )
     {
         //Arrange
         var user = _entityGenerator.GenerateUser;
         _dbContext.Users.Add(user);
         await _dbContext.SaveChangesAsync();
-
-        var command = new DeleteUserCommand()
-        {
-            UserId = user.Id
-        };
+        
+        command.UserId = user.Id;
+        
         var handler = new DeleteUserHandler(_dbContext, _userManager);
         //Act
         await handler.Handle(command, default);
@@ -155,5 +164,8 @@ public class UserCommandTests : IAsyncLifetime
 
     public Task InitializeAsync() => Task.CompletedTask;
 
-    public Task DisposeAsync() => _resetDatabase();
+    public async Task DisposeAsync()
+    {
+         await _resetDatabase();
+    }
 }

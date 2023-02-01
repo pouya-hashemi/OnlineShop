@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain.Common;
 using OnlineShop.Domain.Entities;
@@ -6,14 +8,16 @@ using OnlineShop.Domain.Interfaces;
 
 namespace OnlineShop.Infrastructure.Persistence.SqlServer;
 
-public class AppDbContext : DbContext, IAppDbContext
+public class AppDbContext : IdentityDbContext<User,Role,long>, IAppDbContext
 {
     public AppDbContext(DbContextOptions options) : base(options)
     {
     }
 
-    public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<IdentityUserRole<long>> UserRoles { get; set; }
+
     public DbSet<Category> Categories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Cart> Carts { get; set; }

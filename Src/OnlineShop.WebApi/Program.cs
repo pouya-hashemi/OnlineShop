@@ -37,6 +37,7 @@ app.UseFileServer(new FileServerOptions
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<AppExceptionHandlerMiddleware>();

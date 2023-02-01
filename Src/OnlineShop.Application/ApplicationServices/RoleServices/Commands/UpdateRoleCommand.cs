@@ -8,7 +8,7 @@ namespace OnlineShop.Application.ApplicationServices.RoleServices.Commands;
 
 public class UpdateRoleCommand : IRequest
 {
-    public int RoleId { get; set; }
+    public long RoleId { get; set; }
     public string Name { get; set; }
 }
 

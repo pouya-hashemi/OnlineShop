@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Exceptions;
@@ -9,7 +10,7 @@ using OnlineShop.TestShareContent.DataGenerators;
 
 namespace OnlineShop.DomainTest.DomainServiceTests;
 
-[Collection("Database collection")]
+[Collection("Service collection")]
 public class CartManagerTests : IAsyncLifetime
 {
     private readonly ICartManager _cartManager;
@@ -17,12 +18,12 @@ public class CartManagerTests : IAsyncLifetime
     private readonly EntityGenerator _entityGenerator;
     private readonly IAppDbContext _context;
 
-    public CartManagerTests(DatabaseFixture databaseFixture)
+    public CartManagerTests(ServiceFixture serviceFixture)
     {
-        _cartManager = new CartManager(databaseFixture.DbContext, new StockManager(databaseFixture.DbContext));
-        _resetDatabase = databaseFixture.ResetDatabaseAsync;
+        _cartManager = serviceFixture.ServiceProvider.GetService<ICartManager>();
+        _resetDatabase = serviceFixture.ResetDatabaseAsync;
         _entityGenerator = new EntityGenerator();
-        _context = databaseFixture.DbContext;
+        _context = serviceFixture.DbContext;
     }
 
     [Fact]

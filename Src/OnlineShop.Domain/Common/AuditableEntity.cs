@@ -1,6 +1,8 @@
-﻿namespace OnlineShop.Domain.Common;
+﻿using OnlineShop.Domain.Interfaces;
 
-public class AuditableEntity
+namespace OnlineShop.Domain.Common;
+
+public class AuditableEntity:IAuditableEntity
 {
     public long CreatedUserId { get; set; }
     public DateTime  CreatedDateTime { get; set; }

@@ -4,6 +4,7 @@ using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain.Entities;
 
@@ -29,18 +30,27 @@ public class CreateUserHandler:IRequestHandler<CreateUserCommand,UserDto>
     }
     public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var roles = new List<Role>();
+        var roles = new List<IdentityUserRole<long>>();
         
+        var user = await _userManager.CreateUserAsync(request.Username, request.Password, request.PasswordReEnter,
+            request.UserTitle,cancellationToken);
         if (request.RoleIds != null)
         {
-             roles = await _context.Roles.Where(w => request.RoleIds.Any(a => w.Id == a)).ToListAsync(cancellationToken);
+            roles = await _context.Roles
+                .Where(w => request.RoleIds.Any(a => w.Id == a))
+                .Select(s=>new IdentityUserRole<long>()
+                {
+                    UserId = user.Id,
+                    RoleId = s.Id
+                })
+                .ToListAsync(cancellationToken);
         }
-        
 
-        var user = await _userManager.CreateUserAsync(request.Username, request.Password, request.PasswordReEnter,
-            request.UserTitle,roles,cancellationToken);
 
-        _context.Users.Add(user);
+        await _context.SaveChangesAsync(cancellationToken);
+
+
+        _context.UserRoles.AddRange(roles);
 
         await _context.SaveChangesAsync(cancellationToken);
 

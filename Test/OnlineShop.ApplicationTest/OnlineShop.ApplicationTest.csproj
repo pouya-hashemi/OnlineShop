@@ -28,6 +28,7 @@
       <ProjectReference Include="..\..\Src\OnlineShop.Application\OnlineShop.Application.csproj" />
       <ProjectReference Include="..\..\Src\OnlineShop.Domain\OnlineShop.Domain.csproj" />
       <ProjectReference Include="..\..\Src\OnlineShop.Infrastructure\OnlineShop.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Src\OnlineShop.WebApi\OnlineShop.WebApi.csproj" />
       <ProjectReference Include="..\OnlineShop.TestShareContent\OnlineShop.TestShareContent.csproj" />
     </ItemGroup>
 

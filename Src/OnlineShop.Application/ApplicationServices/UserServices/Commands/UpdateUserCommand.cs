@@ -37,8 +37,8 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Unit>
 
         await _userManager.ChangeUsernameAsync(user, request.Username);
         _userManager.ChangeUserTitle(user, request.UserTitle);
-
         await _context.SaveChangesAsync(cancellationToken);
+
 
         return Unit.Value;
     }

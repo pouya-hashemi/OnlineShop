@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Application.ApplicationServices.ProductServices.Commands;
 using OnlineShop.ApplicationTest.Fixtures;
 using OnlineShop.Domain.DomainServices;
@@ -8,14 +9,13 @@ using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions.BaseExceptions;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
-using OnlineShop.TestShareContent.Common;
 using OnlineShop.TestShareContent.DataGenerators;
-using FileServiceFixture = OnlineShop.TestShareContent.SharedFixtures.FileServiceFixture;
+
 
 namespace OnlineShop.ApplicationTest.ApplicationServices.ProductServices;
 
-[Collection("Database collection")]
-public class ProductCommandTests : IAsyncLifetime, IClassFixture<FileServiceFixture>
+[Collection("Service collection")]
+public class ProductCommandTests : IAsyncLifetime
 {
     private readonly Func<Task> _resetDatabase;
     private readonly IAppDbContext _context;
@@ -25,16 +25,16 @@ public class ProductCommandTests : IAsyncLifetime, IClassFixture<FileServiceFixt
     private readonly FormFileGenerator _formFileGenerator;
     private readonly IConfiguration _configuration;
 
-    public ProductCommandTests(DatabaseFixture databaseFixture,
-        FileServiceFixture fileServiceFixture)
+    public ProductCommandTests(ServiceFixture serviceFixture)
     {
-        _resetDatabase = databaseFixture.ResetDatabaseAsync;
-        _context = databaseFixture.DbContext;
-        _productManager = new ProductManager(_context,fileServiceFixture.FileService);
+
+        _resetDatabase = serviceFixture.ResetDatabaseAsync;
+        _context = serviceFixture.DbContext;
+        _fileService = serviceFixture.ServiceProvider.GetService<IFileService>();
+        _productManager =serviceFixture.ServiceProvider.GetService<IProductManager>();
         _entityGenerator = new EntityGenerator();
-        _fileService = fileServiceFixture.FileService;
         _formFileGenerator = new FormFileGenerator();
-        _configuration = new Utilities().Configuration;
+        _configuration = serviceFixture.ServiceProvider.GetService<IConfiguration>();
     }
 
     [Fact]

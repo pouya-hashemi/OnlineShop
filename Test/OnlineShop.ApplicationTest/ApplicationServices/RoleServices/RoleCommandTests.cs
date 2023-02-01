@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Application.ApplicationServices.RoleServices.Commands;
 using OnlineShop.ApplicationTest.Fixtures;
 using OnlineShop.Domain.DomainServices;
@@ -6,9 +9,10 @@ using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 using OnlineShop.TestShareContent.DataGenerators;
 
+
 namespace OnlineShop.ApplicationTest.ApplicationServices.RoleServices;
 
-[Collection("Database collection")]
+[Collection("Service collection")]
 public class RoleCommandTests : IAsyncLifetime
 {
     private readonly IAppDbContext _context;
@@ -16,12 +20,12 @@ public class RoleCommandTests : IAsyncLifetime
     private readonly EntityGenerator _entityGenerator;
     private readonly IRoleManager _roleManager;
 
-    public RoleCommandTests(DatabaseFixture databaseFixture)
+    public RoleCommandTests(ServiceFixture serviceFixture)
     {
-        _context = databaseFixture.DbContext;
-        _resetDatabase = databaseFixture.ResetDatabaseAsync;
+        _context = serviceFixture.DbContext;
+        _resetDatabase = serviceFixture.ResetDatabaseAsync;
         _entityGenerator = new EntityGenerator();
-        _roleManager = new RoleManager(_context);
+        _roleManager =serviceFixture.ServiceProvider.GetService<IRoleManager>();
     }
 
 

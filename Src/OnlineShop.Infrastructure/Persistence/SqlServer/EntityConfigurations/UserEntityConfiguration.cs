@@ -9,22 +9,17 @@ public class UserEntityConfiguration:IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder
-            .Property(p => p.Username)
-            .HasMaxLength(UserPropertyConfiguration.UsernameMaxLength);
+        builder.ToTable("Users");
         
         builder
-            .Property(p => p.Password)
-            .HasMaxLength(UserPropertyConfiguration.PasswordHashLength);
+            .Property(p => p.UserName)
+            .HasMaxLength(UserPropertyConfiguration.UsernameMaxLength);
+ 
         
         builder
             .Property(p => p.UserTitle)
             .HasMaxLength(UserPropertyConfiguration.UserTitleMaxLength);
-
-        builder
-            .HasMany(s => s.Roles)
-            .WithMany(s => s.Users);
-
-        builder.HasIndex(p => p.Username).IsUnique();
+        
+        builder.HasIndex(p => p.UserName).IsUnique();
     }
 }

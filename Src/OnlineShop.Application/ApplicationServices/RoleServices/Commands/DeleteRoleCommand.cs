@@ -8,7 +8,7 @@ namespace OnlineShop.Application.ApplicationServices.RoleServices.Commands;
 
 public class DeleteRoleCommand:IRequest
 {
-    public int RoleId { get; set; }
+    public long RoleId { get; set; }
 }
 public class DeleteRoleHandler:IRequestHandler<DeleteRoleCommand,Unit>
 {

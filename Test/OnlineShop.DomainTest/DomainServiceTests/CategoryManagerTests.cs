@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Exceptions;
@@ -9,7 +10,7 @@ using OnlineShop.TestShareContent.DataGenerators;
 
 namespace OnlineShop.DomainTest.DomainServiceTests;
 
-[Collection("Database collection")]
+[Collection("Service collection")]
 public class CategoryManagerTests : IAsyncLifetime
 {
     private readonly IAppDbContext _context;
@@ -17,12 +18,12 @@ public class CategoryManagerTests : IAsyncLifetime
     private readonly ICategoryManager _categoryManager;
     private Func<Task> _restDatabase;
 
-    public CategoryManagerTests(DatabaseFixture databaseFixture)
+    public CategoryManagerTests(ServiceFixture serviceFixture)
     {
-        _context = databaseFixture.DbContext;
-        _restDatabase = databaseFixture.ResetDatabaseAsync;
+        _context = serviceFixture.DbContext;
+        _restDatabase = serviceFixture.ResetDatabaseAsync;
         _entityGenerator = new EntityGenerator();
-        _categoryManager = new CategoryManager(_context);
+        _categoryManager = serviceFixture.ServiceProvider.GetService<ICategoryManager>();
     }
 
 

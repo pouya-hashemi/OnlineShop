@@ -1,4 +1,5 @@
-﻿using OnlineShop.Domain.DomainServices;
+﻿using Microsoft.Extensions.DependencyInjection;
+using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Exceptions.BaseExceptions;
 using OnlineShop.Domain.Interfaces;
 using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
@@ -7,7 +8,7 @@ using OnlineShop.TestShareContent.DataGenerators;
 
 namespace OnlineShop.DomainTest.DomainServiceTests;
 
-[Collection("Database collection")]
+[Collection("Service collection")]
 public class StockManagerTests : IAsyncLifetime
 {
     private readonly IStockManager _stockManager;
@@ -15,11 +16,11 @@ public class StockManagerTests : IAsyncLifetime
     private readonly Func<Task> _resetDatabase;
     private readonly IAppDbContext _context;
 
-    public StockManagerTests(DatabaseFixture databaseFixture)
+    public StockManagerTests(ServiceFixture serviceFixture)
     {
-        _context = databaseFixture.DbContext;
-        _stockManager = new StockManager(databaseFixture.DbContext);
-        _resetDatabase = databaseFixture.ResetDatabaseAsync;
+        _context = serviceFixture.DbContext;
+        _stockManager = serviceFixture.ServiceProvider.GetService<IStockManager>();
+        _resetDatabase = serviceFixture.ResetDatabaseAsync;
         _entityGenerator = new EntityGenerator();
     }
 

@@ -1,4 +1,6 @@
-﻿using OnlineShop.Domain.DomainServices;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions;
@@ -7,9 +9,10 @@ using OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 using OnlineShop.DomainTest.Fixtures;
 using OnlineShop.TestShareContent.DataGenerators;
 
+
 namespace OnlineShop.DomainTest.DomainServiceTests;
 
-[Collection("Database collection")]
+[Collection("Service collection")]
 public class RoleManagerTests:IAsyncLifetime
 {
     private readonly EntityGenerator _entityGenerator;
@@ -17,12 +20,12 @@ public class RoleManagerTests:IAsyncLifetime
     private readonly Func<Task> _resetDatabase;
     private readonly IRoleManager _roleManager;
 
-    public RoleManagerTests(DatabaseFixture databaseFixture)
+    public RoleManagerTests(ServiceFixture serviceFixture)
     {
         _entityGenerator = new EntityGenerator();
-        _context = databaseFixture.DbContext;
-        _resetDatabase = databaseFixture.ResetDatabaseAsync;
-        _roleManager = new RoleManager(_context);
+        _context = serviceFixture.DbContext;
+        _resetDatabase = serviceFixture.ResetDatabaseAsync;
+        _roleManager = serviceFixture.ServiceProvider.GetService<IRoleManager>();
     }
 
     public static IEnumerable<object[]> ChangeName_ShouldThrowAlreadyExistsException_WhenNameExistsInDatabase_Data()

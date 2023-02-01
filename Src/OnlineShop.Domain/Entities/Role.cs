@@ -1,14 +1,13 @@
-﻿using OnlineShop.Domain.Common;
+﻿using Microsoft.AspNetCore.Identity;
+using OnlineShop.Domain.Common;
 using OnlineShop.Domain.EntityPropertyConfigurations;
 using OnlineShop.Domain.Exceptions;
+using OnlineShop.Domain.Interfaces;
 
 namespace OnlineShop.Domain.Entities;
 
-public class Role : EntityBase<int>
+public class Role : IdentityRole<long>,IAuditableEntity
 {
-    public string Name { get; private set; }
-    public ICollection<User> Users { get; set; }
-
     public Role(string name)
     {
         SetName(name);
@@ -45,4 +44,9 @@ public class Role : EntityBase<int>
     }
 
     #endregion
+
+    public long CreatedUserId { get; set; }
+    public DateTime CreatedDateTime { get; set; }
+    public long? ModifiedUserId { get; set; }
+    public DateTime? ModifiedDateTime { get; set; }
 }

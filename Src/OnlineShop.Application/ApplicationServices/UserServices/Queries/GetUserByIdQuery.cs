@@ -25,7 +25,7 @@ public class GetUserByIdHandler:IRequestHandler<GetUserByIdQuery,UserDto>
             .Select(s=>new UserDto()
             {
                 Id = s.Id,
-                Username = s.UserName,
+                UserName = s.UserName,
                 UserTitle = s.UserTitle,
                 
                 CreatedDateTime = s.CreatedDateTime,

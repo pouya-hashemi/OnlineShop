@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Application.ApplicationServices.RoleServices.Commands;
 using OnlineShop.Application.ApplicationServices.RoleServices.Queries;
 using OnlineShop.Application.ApplicationServices.RoleServices.Responses;
@@ -7,7 +8,7 @@ using OnlineShop.WebApi.Common;
 using OnlineShop.WebApi.Exceptions;
 
 namespace OnlineShop.WebApi.Controllers;
-
+[Authorize]
 public class RoleController:AppControllerBase
 {
     [HttpGet]

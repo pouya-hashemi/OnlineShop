@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using OnlineShop.Domain.DomainServices;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Interfaces;
@@ -20,11 +23,33 @@ public static class InfrastructureDependencyInjection
             opt.UseSqlServer(configuration.GetConnectionString("SqlConnection"));
         });
 
-        services.AddIdentity<User, Role>(options => { })
+        services.AddIdentityCore<User>(options =>
+            {
+                
+            }).AddRoles<Role>()
             .AddEntityFrameworkStores<AppDbContext>();
         
+        services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = false,
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(configuration["Jwt:Key"])
+                    )
+                };
+            });
         services.AddScoped<IAppDbContext, AppDbContext>();
+        services.AddScoped<ITokenManager, TokenManager>();
         services.AddTransient<IFileService, FileService>();
+
 
 
 

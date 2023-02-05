@@ -1,7 +1,9 @@
-﻿namespace OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
+﻿using OnlineShop.Domain.Entities;
+
+namespace OnlineShop.Domain.Interfaces.DomainServiceInterfaces;
 
 public interface ITokenManager
 {
-    Task<string> GenerateGuestToken();
-    Task<string> GenerateVendorToken();
+    string GenerateGuestToken();
+    string GenerateVendorToken(User user);
 }

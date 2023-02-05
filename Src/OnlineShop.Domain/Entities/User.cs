@@ -14,6 +14,7 @@ public class User :IdentityUser<long>, IAuditableEntity
     public DateTime CreatedDateTime { get; set; }
     public long? ModifiedUserId { get; set; }
     public DateTime? ModifiedDateTime { get; set; }
+    
 
     private User() { }
 

@@ -36,14 +36,12 @@ public class CreateUserHandler:IRequestHandler<CreateUserCommand,UserDto>
             request.UserTitle,cancellationToken);
         if (request.RoleIds != null)
         {
-            roles = await _context.Roles
-                .Where(w => request.RoleIds.Any(a => w.Id == a))
+            roles = request.RoleIds
                 .Select(s=>new IdentityUserRole<long>()
                 {
                     UserId = user.Id,
-                    RoleId = s.Id
-                })
-                .ToListAsync(cancellationToken);
+                    RoleId = s
+                }).ToList();
         }
 
 

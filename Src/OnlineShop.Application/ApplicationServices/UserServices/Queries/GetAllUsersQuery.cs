@@ -36,7 +36,7 @@ public class GetAllUsersHandler:IRequestHandler<GetAllUsersQuery,PaginationList<
             .Select(s=>new UserDto()
             {
                 Id = s.Id,
-                Username = s.UserName,
+                UserName = s.UserName,
                 UserTitle = s.UserTitle,
                 
                 CreatedDateTime = s.CreatedDateTime,

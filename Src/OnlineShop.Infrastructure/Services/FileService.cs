@@ -8,13 +8,15 @@ namespace OnlineShop.Infrastructure.Services;
 public class FileService : IFileService
 {
     private readonly string? _baseFilePath;
+    private readonly string? _baseFileUrl;
 
     public FileService(IConfiguration configuration)
     {
         _baseFilePath = configuration["FileStoringBasePath"];
+        _baseFileUrl = configuration["FileDownloadBaseUrl"];
     }
 
-    public async Task<string> SaveImageFile(IFormFile file)
+    public async Task<string> SaveImageFileAsync(IFormFile file, CancellationToken cancellationToken = default)
     {
         var acceptedExtensions = new string[] {".jpg", ".jpeg"};
         var maxImageSize = 5000000;
@@ -49,7 +51,7 @@ public class FileService : IFileService
 
 
         await using Stream stream = new FileStream(path, FileMode.Create);
-        await file.CopyToAsync(stream);
+        await file.CopyToAsync(stream,cancellationToken);
 
         return path.Replace(_baseFilePath,"");
     }
@@ -60,5 +62,10 @@ public class FileService : IFileService
         {
             File.Delete(path);
         }
+    }
+
+    public string ConvertFilePathToFileUrl(string filePath)
+    {
+        return _baseFileUrl + filePath.Replace("\\", "/");
     }
 }

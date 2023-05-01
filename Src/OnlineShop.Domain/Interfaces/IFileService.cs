@@ -4,6 +4,7 @@ namespace OnlineShop.Domain.Interfaces;
 
 public interface IFileService
 {
-    Task<string> SaveImageFile(IFormFile file);
+    Task<string> SaveImageFileAsync(IFormFile file,CancellationToken cancellationToken=default);
     void RemoveFile(string path);
+    string ConvertFilePathToFileUrl(string filePath);
 }

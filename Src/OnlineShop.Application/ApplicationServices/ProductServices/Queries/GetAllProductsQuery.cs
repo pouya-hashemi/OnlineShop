@@ -49,7 +49,7 @@ public class GetAllProductsHandler : IRequestHandler<GetAllProductsQuery, Pagina
                 Quantity = s.Quantity,
                 CategoryId = s.CategoryId,
                 CategoryName = s.Category.Name,
-                ImageUrl =_configuration["FileDownloadBaseUrl"]+ s.ImageUrl.Replace("\\","/"),
+                ImageUrl =s.ImageUrl,
                 CreatedDateTime = s.CreatedDateTime,
                 CreatedUserId = s.CreatedUserId,
                 ModifiedDateTime = s.ModifiedDateTime,

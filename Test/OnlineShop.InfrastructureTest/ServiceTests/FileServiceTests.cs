@@ -28,7 +28,7 @@ public class FileServiceTests : IAsyncLifetime, IClassFixture<FileServiceFixture
         //Arrange
         var pdfFile = _formFileGenerator.CreateFileFormFilePdf();
         //Act
-        var act = async () => { await _fileService.SaveImageFile(pdfFile); };
+        var act = async () => { await _fileService.SaveImageFileAsync(pdfFile); };
         //Assert
         await Assert.ThrowsAsync<FileExtensionException>(act);
     }
@@ -40,7 +40,7 @@ public class FileServiceTests : IAsyncLifetime, IClassFixture<FileServiceFixture
         //Arrange
         var file = _formFileGenerator.CreateEmptyImageFormFile();
         //Act
-        var act = async () => { await _fileService.SaveImageFile(file); };
+        var act = async () => { await _fileService.SaveImageFileAsync(file); };
         //Assert
         await Assert.ThrowsAsync<NullOrEmptyException>(act);
     }
@@ -52,7 +52,7 @@ public class FileServiceTests : IAsyncLifetime, IClassFixture<FileServiceFixture
         //Arrange
         var jpgFile = _formFileGenerator.CreateImageFormFileJpg();
         //Act
-        var path = await _fileService.SaveImageFile(jpgFile);
+        var path = await _fileService.SaveImageFileAsync(jpgFile);
         //Assert
         Assert.True(File.Exists(_configuration["FileStoringBasePath"] + path));
     }
@@ -63,7 +63,7 @@ public class FileServiceTests : IAsyncLifetime, IClassFixture<FileServiceFixture
     {
         //Arrange
         var jpgFile = _formFileGenerator.CreateImageFormFileJpg();
-        var path = await _fileService.SaveImageFile(jpgFile);
+        var path = await _fileService.SaveImageFileAsync(jpgFile);
 
         //Act
         _fileService.RemoveFile(_configuration["FileStoringBasePath"] + path);

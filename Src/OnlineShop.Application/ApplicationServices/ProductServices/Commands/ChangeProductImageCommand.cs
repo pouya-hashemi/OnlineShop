@@ -37,11 +37,11 @@ public class ChangeProductImageHandler:IRequestHandler<ChangeProductImageCommand
             throw new NotFoundException(nameof(product));
         }
 
-        var imagePath =await _fileService.SaveImageFile(request.ImageFile);
+        var imagePath =await _fileService.SaveImageFileAsync(request.ImageFile);
 
-        _fileService.RemoveFile(product.ImageUrl);
+        _fileService.RemoveFile(product.ImagePath);
         
-        _productManager.ChangeImageUrl(product,imagePath);
+        _productManager.ChangeImagePath(product,imagePath);
 
         await _context.SaveChangesAsync(cancellationToken);
 

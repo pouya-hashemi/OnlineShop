@@ -12,8 +12,8 @@ public class Cart : EntityBase<long>
     public int Quantity { get; private set; }
     public decimal Price { get; private set; }
 
-
-    public Cart(string token, Product product, int quantity, long price)
+private Cart(){}
+    public Cart(string token, Product product, int quantity, decimal price)
     {
         SetToken(token);
         SetProduct(product);

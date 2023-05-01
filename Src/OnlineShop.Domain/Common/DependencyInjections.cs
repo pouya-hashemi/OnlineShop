@@ -13,6 +13,8 @@ public static class DependencyInjections
         services.AddTransient<IRoleManager,RoleManager>();
         services.AddTransient<ICategoryManager,CategoryManager>();
         services.AddTransient<IProductManager,ProductManager>();
+        services.AddTransient<ICartManager,CartManager>();
+        services.AddTransient<IStockManager,StockManager>();
         
         return services;
     }

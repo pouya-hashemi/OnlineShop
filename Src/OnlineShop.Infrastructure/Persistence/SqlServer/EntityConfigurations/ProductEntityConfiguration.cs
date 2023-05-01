@@ -15,6 +15,11 @@ public class ProductEntityConfiguration:IEntityTypeConfiguration<Product>
             .IsRequired();
 
         builder
+            .Property(p => p.ImagePath)
+            .HasMaxLength(ProductPropertyConfiguration.ImagePathMaxLength)
+            .IsRequired();
+        
+        builder
             .Property(p => p.ImageUrl)
             .HasMaxLength(ProductPropertyConfiguration.ImageUrlMaxLength)
             .IsRequired();

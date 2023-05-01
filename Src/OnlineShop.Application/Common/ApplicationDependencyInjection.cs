@@ -14,9 +14,8 @@ public static class ApplicationDependencyInjection
     {
         services.AddMediatR(typeof(ApplicationDependencyInjection));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddMapsterConfiguration(configuration);
 
-        
+
         return services;
     }
 }

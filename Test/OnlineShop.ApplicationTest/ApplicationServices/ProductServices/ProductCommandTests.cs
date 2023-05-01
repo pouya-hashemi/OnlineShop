@@ -30,7 +30,7 @@ public class ProductCommandTests : IAsyncLifetime, IClassFixture<FileServiceFixt
     {
         _resetDatabase = databaseFixture.ResetDatabaseAsync;
         _context = databaseFixture.DbContext;
-        _productManager = new ProductManager(_context);
+        _productManager = new ProductManager(_context,fileServiceFixture.FileService);
         _entityGenerator = new EntityGenerator();
         _fileService = fileServiceFixture.FileService;
         _formFileGenerator = new FormFileGenerator();
@@ -261,7 +261,7 @@ public class ProductCommandTests : IAsyncLifetime, IClassFixture<FileServiceFixt
             .Where(w => w.Id == productInDb.Id)
             .FirstOrDefaultAsync();
         //Assert
-        var exists=File.Exists(_configuration["FileStoringBasePath"] + productAfterUpdate.ImageUrl);
+        var exists=File.Exists(_configuration["FileStoringBasePath"] + productAfterUpdate.ImagePath);
         Assert.True(exists);
     }
     

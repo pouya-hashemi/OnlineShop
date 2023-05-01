@@ -61,7 +61,7 @@ public class ProductController : AppControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Patch(long id)
+    public async Task<ActionResult> Delete(long id)
     {
         await MediatorSender.Send(new DeleteProductCommand()
         {
